@@ -7,7 +7,7 @@ def initializiePriorProb_BN(y):
 def initializeMsg_CN_BN(m,n):
 
 def updateMsg_CN_BN(m,n):
-	LRmn = np.prod(np.sign(a[np.multiply(H(m,:),LQnm) != 0])) * np.amin(ns.abs(a[np.multiply(H(m,:),LQnm) != 0]))
+	LRmn = np.prod(np.sign(a[np.multiply(H[m,:],LQnm) != 0])) * np.amin(np.abs(a[np.multiply(H[m,:],LQnm) != 0]))
 
 def updatePosteriorProb_BN():
 
