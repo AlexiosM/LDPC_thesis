@@ -1,12 +1,17 @@
 import numpy as np
 
 
+MAX_ITERATIONS = 100
+variance = 1
+
 M = np.shape(H)[0]
 N = np.shape(H)[1]
+awgn = np.random.normal(0,variance,N)
+signal = np.random.choice([-1,1],N) # random vector of +1 -1
 
+y = signal + awgn
 
 LPn0 = 2*y/variance # vector 1xN
-
 
 while (iteration < MAX_ITERATIONS):
 	for m in range(M):
@@ -19,24 +24,21 @@ while (iteration < MAX_ITERATIONS):
 		LP[n] = LPn0[n] +  np.sum(np.multiply(LRnm[:,n],H_col)) 
 
 	if iteration = 0:
-		LQmn = LPn0
+		LQnm = LPn0
 	else:
-		LQnm = LP - LRmn  # ????
+		LQnm = (LP - LRmn).T
 
-
-	#hard decoding
+	# hard decoding
 	for n in range(N):
 		if LP[n] < 0:
 			C[n] = 1
-		else
+		else:
 			C[n] = 0
 
-
 	# Check residue
-
-	if residue == 0:
+	if False not in  residue == 0:
 		print "result is:"
-		print c
+		print C
 		return
 	else:
 		iteration += 1
