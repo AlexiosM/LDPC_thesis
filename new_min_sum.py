@@ -1,6 +1,30 @@
 import numpy as np
+import os
 
 
+# Read matrix H from H.txt file
+H_positions = []
+
+num_of_lines = int(os.popen('cat H.txt | wc -l').read())
+print num_of_lines
+# H.txt has size of 384x32 => 32 CN and 384 BN
+
+for line in open('H.txt','r').readlines():
+	H_positions.append(len(line.split(',')[:-1] ))
+# check that all elements in H_positions are equal
+if all(elem == H_positions[0] for elem in H_positions):
+	print 'Tanner graph is uniform'
+else:
+	print 'Check Nodes check different numbers of Binary Nodes'
+
+H = np.zeros((H_positions[0],num_of_lines))
+for line in open('H.txt','r').readlines():
+	for elem in line.split(',')[:-1]:
+		H[elem,line] = 1
+
+
+'''
+# LDPC Min Sum
 MAX_ITERATIONS = 100
 
 # construction of the incoming signal vector
@@ -52,3 +76,5 @@ while (iteration < MAX_ITERATIONS):
 		iteration += 1
 		continue
 print "Decoding failed" 
+'''
+
