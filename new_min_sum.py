@@ -56,6 +56,9 @@ print y
 
 fake_encoded_y = np.zeros(N)
 fake_encoded_y[1] = 1
+#fake_encoded_y[5] = 1
+#fake_encoded_y[10] = 1
+
 print fake_encoded_y
 y=fake_encoded_y
 print 'fake y :'
@@ -100,7 +103,7 @@ while (iteration < MAX_ITERATIONS):
 		else:
 			C[n] = 0
 	residue = H.reshape(N,M).T.dot(C) # multiplication vector*Matrix c*H
-	print 'residue :'
+	print 'residue with lengh('+ str(len(residue)) +') :'
 	print residue
 	if not np.any(residue) : # if all residue elements are zero
 		print "result is:"
