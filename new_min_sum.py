@@ -31,7 +31,7 @@ for line,line_num in zip(open('H.txt','r').readlines(),range(M)):
 	for elem in map(int,line.split(',')[:-1]):
 		H[line_num-1,elem-1] = 1
 
-print 'H : '
+print 'Tanner graph matrix\nH : '
 print H
 np.shape(H)
 
@@ -43,7 +43,7 @@ print 'Each BN is connected to '+ str(np.sum(H[:,ran])) + ' CNs'
 
 # LDPC Min Sum
 MAX_ITERATIONS = 100
-variance = 2
+variance = 1
 # construction of the incoming signal vector
 #M = np.shape(H)[0]
 #N = np.shape(H)[1]
@@ -81,7 +81,7 @@ while (iteration < MAX_ITERATIONS):
 			_row = H[m,:] # take all BNs connected to the specific CN
 			H_row[n] = 0 # except the specific BN for which the message is to be sent
 			LR[m,n] = np.prod(np.where(np.multiply(H_row,LQ[:,m].T) > 0,1,-1)) * np.amin(np.abs(np.multiply(H_row,LQ[:,m].T)))
-	print 'Update messages from CNs to BNs\nLR in iter: '+str(iteration)+':'
+	print 'Update messages from CNs to BNs\nLR in iter: '+str(iteration+1)+':'
 	print LR
 
 	for n in range(N): # adding vectors, element by element, aims to update the state of each BN
@@ -94,7 +94,7 @@ while (iteration < MAX_ITERATIONS):
 	if iteration > 0:
 		for m in range(M):
 			LQ[:,m] = (LP - LR[m,:]).T # the subtraction can be done with calculations on N-size vectors so each LQ column is calculated directly
-	print 'Update messages from BNs to CNs\nLQ in iter: '+str(iteration)+':'
+	print 'Update messages from BNs to CNs\nLQ in iter: '+str(iteration+1)+':'
 	print LQ
 
 	# hard decoding
