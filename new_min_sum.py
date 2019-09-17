@@ -42,29 +42,21 @@ print 'Each BN is connected to '+ str(np.sum(H[:,ran])) + ' CNs'
 
 
 # LDPC Min Sum
-MAX_ITERATIONS = 10
-variance = 1
+MAX_ITERATIONS = 100
+variance = 2
 # construction of the incoming signal vector
 #M = np.shape(H)[0]
 #N = np.shape(H)[1]
+
+fake_encoded_y = np.ones(N)
 awgn = np.random.normal(0,variance,N)
-signal = np.random.choice([-1,1],N) # random vector of +1 -1
+#signal = np.random.choice([-1,1],N) # random vector of +1 -1
+#y = signal + awgn
 
-y = signal + awgn
-print 'y :'
+y = fake_encoded_y + awgn
+
+print 'Incoming message y :'
 print y
-
-fake_encoded_y = np.zeros(N)
-fake_encoded_y[1] = 1
-#fake_encoded_y[5] = 1
-#fake_encoded_y[10] = 1
-
-print fake_encoded_y
-y=fake_encoded_y
-print 'fake y :'
-print y
-
-
 
 
 LR = np.zeros((M,N))
@@ -72,8 +64,11 @@ H_row = np.zeros(N)
 LP = np.zeros(N)
 C = np.zeros(N)
 LPn0 = 2*y/variance # vector 1xN
+print "Initial vector of LPn0 = prior probabilities of BNs :"
+print LPn0
 iteration = 0
 while (iteration < MAX_ITERATIONS):
+	print '\nIteration : '+str(iteration+1)
 	# initialize LQ
 	if iteration == 0:
 		tmp_val = np.repeat(LPn0,M).reshape(N,M).T # columns fulfilled with the initial (a prior) BN probabilities  
@@ -86,15 +81,21 @@ while (iteration < MAX_ITERATIONS):
 			_row = H[m,:] # take all BNs connected to the specific CN
 			H_row[n] = 0 # except the specific BN for which the message is to be sent
 			LR[m,n] = np.prod(np.where(np.multiply(H_row,LQ[:,m].T) > 0,1,-1)) * np.amin(np.abs(np.multiply(H_row,LQ[:,m].T)))
+	print 'Update messages from CNs to BNs\nLR in iter: '+str(iteration)+':'
+	print LR
 
 	for n in range(N): # adding vectors, element by element, aims to update the state of each BN
 		H_col = H[:,n] # LP, which is the new state of a specific BN is the initial (prior probability of that BN) and the messages received from all the attached CNs to it
 		LP[n] = LPn0[n] +  np.sum(np.multiply(LR[:,n],H_col)) 
+	print 'Posterior probabilities of BNs\nLP:'
+	print LP
 
 	# update messages from each BN to each CN attached to it
 	if iteration > 0:
 		for m in range(M):
-			LQ[:,m] = (LP - LR).T # the subtraction can be done with calculations on N-size vectors so each LQ column is calculated directly
+			LQ[:,m] = (LP - LR[m,:]).T # the subtraction can be done with calculations on N-size vectors so each LQ column is calculated directly
+	print 'Update messages from BNs to CNs\nLQ in iter: '+str(iteration)+':'
+	print LQ
 
 	# hard decoding
 	for n in range(N):
@@ -102,15 +103,17 @@ while (iteration < MAX_ITERATIONS):
 			C[n] = 1
 		else:
 			C[n] = 0
+	print 'After Hard Decoding\nC:'
+	print C
 	residue = H.reshape(N,M).T.dot(C) # multiplication vector*Matrix c*H
-	print 'residue with lengh('+ str(len(residue)) +') :'
+	print 'Residue with lengh('+ str(len(residue)) +') :'
 	print residue
 	if not np.any(residue) : # if all residue elements are zero
-		print "result is:"
+		print "Final result is:"
 		print C
 	        exit(0)	
 	else:
 		iteration += 1
 		continue
 print "Decoding failed" 
-
+print C
