@@ -40,37 +40,38 @@ ran = 100
 print 'Each CN is connected to '+ str(np.sum(H[ran,:])) + ' BNs'
 print 'Each BN is connected to '+ str(np.sum(H[:,ran])) + ' CNs'
 
+
 def create_Y(iteration):
-	global fake_encoded_y = np.ones(N)
-	global awgn = np.random.normal(0,variance,N)
+	fake_encoded_y = np.ones(N)
+	awgn = np.random.normal(0,variance,N)
 	#signal = np.random.choice([-1,1],N) # random vector of +1 -1
 	#y = signal + awgn
-
-	global y = fake_encoded_y + awgn
-
+	y = fake_encoded_y + awgn
 	print 'Incoming message y :'
 	print y
+	return y
 
 
 
 # LDPC Min Sum
 MAX_ITERATIONS = 100
-variance = 0.33
+#variance = 0.33
 # construction of the incoming signal vector
 #M = np.shape(H)[0]
 #N = np.shape(H)[1]
 
-def LDPC_min_max(variance)
+def LDPC_min_max(variance):
 	LR = np.zeros((M,N))
 	H_row = np.zeros(N)
 	LP = np.zeros(N)
 	C = np.zeros(N)
 	t0 = time.time()
+	y = create_Y(iteration)
 	LPn0 = 2*y/variance # vector 1xN
 	print "Initial vector of LPn0 = prior probabilities of BNs :"
 	print LPn0
 	iteration = 0
-	create_Y(iteration)
+	# begin Iterations for the specific input
 	while (iteration < MAX_ITERATIONS):
 		print '\nIteration : '+str(iteration+1)
 		# initialize LQ
@@ -123,8 +124,19 @@ def LDPC_min_max(variance)
 	print "Decoding failed, returning BER"
 	print time.time() - t0
 	print C
-	BER = np.unique(C, return_counts=True)[1] # the number of ones inside the result is the number of total errors that have not been corrected
+	BER = list(C).count(1) # the number of ones inside the result is the number of total errors that have not been corrected
 	return BER
 
 
 
+
+ber=[]
+snr=[]
+for varian in np.arange (1, 0, -0.25):
+	ber.append(LDPC_min_max(varian))
+	snr.append(10*np.log10(1/varian))
+
+
+
+print ber
+print snr
