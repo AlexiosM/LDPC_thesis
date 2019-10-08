@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 import time
@@ -41,7 +42,7 @@ print 'Each CN is connected to '+ str(np.sum(H[ran,:])) + ' BNs'
 print 'Each BN is connected to '+ str(np.sum(H[:,ran])) + ' CNs'
 
 
-def create_Y(iteration):
+def create_Y(variance):
 	fake_encoded_y = np.ones(N)
 	awgn = np.random.normal(0,variance,N)
 	#signal = np.random.choice([-1,1],N) # random vector of +1 -1
@@ -66,7 +67,7 @@ def LDPC_min_max(variance):
 	LP = np.zeros(N)
 	C = np.zeros(N)
 	t0 = time.time()
-	y = create_Y(iteration)
+	y = create_Y(variance)
 	LPn0 = 2*y/variance # vector 1xN
 	print "Initial vector of LPn0 = prior probabilities of BNs :"
 	print LPn0
@@ -132,7 +133,7 @@ def LDPC_min_max(variance):
 
 ber=[]
 snr=[]
-for varian in np.arange (1, 0, -0.25):
+for varian in np.arange (2, 0, -0.25):
 	ber.append(LDPC_min_max(varian))
 	snr.append(10*np.log10(1/varian))
 
@@ -140,3 +141,8 @@ for varian in np.arange (1, 0, -0.25):
 
 print ber
 print snr
+plt.plot(snr,ber,'ro')
+plt.xlabel('SNR')
+plt.ylabel('BER')
+plt.show()
+
