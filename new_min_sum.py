@@ -133,7 +133,7 @@ def LDPC_min_max(variance):
 
 ber=[]
 snr=[]
-for varian in np.arange (2, 0, -0.25):
+for varian in np.arange (2, 0, -0.2):
 	ber.append(LDPC_min_max(varian))
 	snr.append(10*np.log10(1/varian))
 
@@ -141,8 +141,12 @@ for varian in np.arange (2, 0, -0.25):
 
 print ber
 print snr
+#[612, 609, 521, 436, 325, 158, 43, 0]
+#[-3.010299956639812, -2.4303804868629446, -1.7609125905568126, -0.969100130080564, 0.0, 1.2493873660829993, 3.010299956639812, 6.020599913279624]
+
 plt.plot(snr,ber,'ro')
 plt.xlabel('SNR')
 plt.ylabel('BER')
 plt.show()
+
 
