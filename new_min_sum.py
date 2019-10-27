@@ -125,7 +125,8 @@ def LDPC_min_max(variance):
 	print "Decoding failed, returning BER"
 	print time.time() - t0
 	print C
-	BER = list(C).count(1) # the number of ones inside the result is the number of total errors that have not been corrected
+	BE_Sum = list(C).count(1) # the number of ones inside the result is the number of total errors that have not been corrected
+	BER = BE_Sum/N
 	return BER
 
 
@@ -133,7 +134,7 @@ def LDPC_min_max(variance):
 
 ber=[]
 snr=[]
-for varian in np.arange (2, 0.001, -0.12):
+for varian in np.arange (1, 0.33, -0.05):
 	ber.append(LDPC_min_max(varian))
 	snr.append(10*np.log10(1/varian))
 
