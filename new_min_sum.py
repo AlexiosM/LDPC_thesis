@@ -135,8 +135,13 @@ def LDPC_min_max(variance):
 ber=[]
 snr=[]
 for varian in np.arange (1, 0.33, -0.05):
+	print "\n\n\nSignal with variance: "+str(varian)
 	ber.append(LDPC_min_max(varian))
 	snr.append(10*np.log10(1/varian))
+	print "BER list: "
+	print ber
+	print "SNR list: "
+	print snr
 
 
 
