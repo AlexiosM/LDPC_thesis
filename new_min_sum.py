@@ -153,6 +153,6 @@ print snr
 plt.plot(snr,ber,'ro')
 plt.xlabel('SNR')
 plt.ylabel('BER')
-plt.show()
-
+#plt.show()
+plt.savefig('foo.png')
 
