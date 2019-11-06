@@ -120,9 +120,9 @@ def LDPC_min_max(variance):
 	print "Decoding failed, returning BER"
 	print C
 	BE_Sum = list(C).count(1) # the number of ones inside the result is the number of total errors that have not been corrected
-	print "Sum of Error bits"+str(BE_Sum)
+	print "Sum of Error bits : "+str(BE_Sum)
 	BER = BE_Sum/float(N)
-	print "Bit Error Ratio(BE_Sum/N) :"+str(BE_Sum)+'/'+str(N)+'='+str(BER)
+	print "Bit Error Ratio(BE_Sum/N) : "+str(BE_Sum)+'/'+str(N)+' = '+str(BER)
 	return BER
 
 
