@@ -61,17 +61,13 @@ def create_Y(variance):
 
 # LDPC Min Sum
 MAX_ITERATIONS = 100
-#variance = 0.33
-# construction of the incoming signal vector
-#M = np.shape(H)[0]
-#N = np.shape(H)[1]
+t0 = time.time()
 
 def LDPC_min_max(variance):
 	LR = np.zeros((M,N))
 	H_row = np.zeros(N)
 	LP = np.zeros(N)
 	C = np.zeros(N)
-	t0 = time.time()
 	y = create_Y(variance)
 	LPn0 = 2*y/variance # vector 1xN
 	print "Initial vector of LPn0 = prior probabilities of BNs :"
@@ -122,16 +118,16 @@ def LDPC_min_max(variance):
 		if not np.any(residue) : # if all residue elements are zero
 			print "Final result is:"
 			print C
-			print time.time() - t0
 			return 0
 		else:
 			iteration += 1
 			continue
 	print "Decoding failed, returning BER"
-	print time.time() - t0
 	print C
 	BE_Sum = list(C).count(1) # the number of ones inside the result is the number of total errors that have not been corrected
-	BER = BE_Sum/N
+	print "Sum of Error bits : "+str(BE_Sum)
+	BER = BE_Sum/float(N)
+	print "Bit Error Ratio(BE_Sum/N) : "+str(BE_Sum)+'/'+str(N)+' = '+str(BER)
 	return BER
 
 
@@ -149,15 +145,12 @@ for varian in np.arange (1, 0.33, -0.05):
 	print snr
 
 
-
-print ber
-print snr
-#[612, 609, 521, 436, 325, 158, 43, 0]
-#[-3.010299956639812, -2.4303804868629446, -1.7609125905568126, -0.969100130080564, 0.0, 1.2493873660829993, 3.010299956639812, 6.020599913279624]
+print 'Time past Summary (in sec):'
+print time.time() - t0
 
 plt.plot(snr,ber,'ro')
 plt.xlabel('SNR')
 plt.ylabel('BER')
-#plt.show()
 plt.savefig('foo.png')
+plt.show()
 
