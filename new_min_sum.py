@@ -1,7 +1,12 @@
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import os
 import time
+
+# for the case where Linux has not desplay
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 
 # Read matrix H from H.txt file
